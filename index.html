@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simon Says Game</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <h1>Simon Says Game</h1>
-  <h2>Press any key to start the game</h2>
+  <header>
+    <h1>Simon Says</h1>
+    <h2>Press any key to start the game</h2>
+  </header>
 
-  <div class="btn-container">
+  <main>
+    <div class="btn-container">
+      <div class="line-one">
+        <button class="btn red" id="red" aria-label="Red button"></button>
+        <button class="btn green" id="green" aria-label="Green button"></button>
+      </div>
+      <div class="line-two">
+        <button class="btn blue" id="blue" aria-label="Blue button"></button>
+        <button class="btn purple" id="purple" aria-label="Purple button"></button>
+      </div>
+    </div>
 
-    <div class="line-one">
-      <div class="btn red" type="button" id="red"></div>
-      <div class="btn green" type="button" id="green"></div>
-    </div>
-    
-    <div class="line-two">
-      <div class="btn blue" type="button" id="blue"></div>
-      <div class="btn purple" type="button" id="purple"></div>
-    </div>
-    
-  </div>
-  
+    <section class="about">
+      <h2>About This Game</h2>
+      <p>Simon Says is a memory-based color pattern game where you have to repeat the sequence shown by the computer. With each level, a new color is added, and your goal is to repeat the pattern accurately. If you make a mistake, the game resets and shows your score.</p>
+    </section>
+  </main>
+
   <script src="script.js"></script>
 </body>
 </html>
