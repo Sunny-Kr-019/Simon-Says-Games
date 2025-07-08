@@ -1,37 +1,145 @@
-body{
+/* Reset some default */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f4f8; /* Soft light blue-gray background */
+  color: #222;
   text-align: center;
-}
-
-.btn{
-  width: 200px;
-  height: 200px;
-  border-radius: 20%;
-  border: 9px solid black;
-  margin: 2rem;
-}
-
-.btn-container{
+  min-height: 100vh;
+  padding: 2rem 1rem;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Header styling */
+header h1 {
+  font-size: 3rem;
+  margin-bottom: 0.2rem;
+  color: #333;
+  user-select: none;
+}
+
+header h2 {
+  font-weight: normal;
+  font-size: 1.25rem;
+  color: #666;
+  margin-bottom: 2rem;
+  user-select: none;
+}
+
+/* Container for buttons */
+.btn-container {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 1.5rem;
+  max-width: 450px;
+  margin-bottom: 3rem;
 }
 
-.red{
-  background-color: rgb(255, 17, 17);
-}
-.green{
-  background-color: rgb(87, 157, 89);
-}
-.blue{
-  background-color: rgb(38, 137, 207);
-}
-.purple{
-  background-color: rgb(224, 57, 224);
+/* Each line is a flex container */
+.line-one,
+.line-two {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  width: 100%;
 }
 
-.flash{
-  background-color: white;
+/* Button styling */
+.btn {
+  flex: 1 1 40%;
+  max-width: 200px;
+  aspect-ratio: 1 / 1; /* square buttons */
+  border-radius: 20%;
+  border: 8px solid #222;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  user-select: none;
 }
 
-.userflash{
-  background-color: rgb(139, 227, 139);
+/* Button colors */
+.red {
+  background-color: #ff2424;
+  box-shadow: 0 6px 15px #ff2424aa;
+}
+
+.green {
+  background-color: #57a45b;
+  box-shadow: 0 6px 15px #57a45baa;
+}
+
+.blue {
+  background-color: #2691cf;
+  box-shadow: 0 6px 15px #2691cfaa;
+}
+
+.purple {
+  background-color: #e039e0;
+  box-shadow: 0 6px 15px #e039e0aa;
+}
+
+/* Flash animation */
+.flash {
+  background-color: white !important;
+  box-shadow: 0 0 20px 10px white !important;
+  transform: scale(1.1);
+}
+
+/* User click flash */
+.userflash {
+  background-color: #8be38b !important;
+  box-shadow: 0 0 20px 10px #8be38b !important;
+  transform: scale(1.1);
+}
+
+/* Hover effect for buttons */
+.btn:hover {
+  box-shadow: 0 12px 20px rgba(0,0,0,0.3);
+  transform: scale(1.05);
+}
+
+/* About section */
+.about {
+  max-width: 450px;
+  padding: 0 1rem;
+}
+
+.about h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.about p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #444;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .btn-container {
+    max-width: 100%;
+    gap: 1rem;
+  }
+
+  .btn {
+    max-width: 45vw;
+  }
+
+  header h1 {
+    font-size: 2.25rem;
+  }
+
+  header h2 {
+    font-size: 1rem;
+  }
 }
