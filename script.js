@@ -1,85 +1,154 @@
+let acceptingInput = false;
+
+// ================= SCORE =================
+const scoreBoard = document.querySelector("#scoreBoard");
+let highScore = localStorage.getItem("highScore") || 0;
+scoreBoard.innerText = `Score: 0 | High Score: ${highScore}`;
+
+// ================= ELEMENTS =================
+const statusText = document.querySelector(".text-muted"); // FIXED
+const startBtn = document.querySelector("#startBtn");
+const gameBtns = document.querySelectorAll(".game-btn"); // FIXED
+
+// ================= GAME DATA =================
 let gameSeq = [];
 let userSeq = [];
-
 let btns = ["red", "green", "blue", "purple"];
 
 let started = false;
 let level = 0;
 
-let h2 = document.querySelector("h2");
+// ================= BUTTON ENABLE / DISABLE =================
+function disableGameButtons() {
+  gameBtns.forEach(btn => {
+    btn.disabled = true;
+    btn.classList.add("opacity-50");
+  });
+}
 
-document.addEventListener("keypress", function(){
-  if(started == false){
-    console.log("game is started");
+function enableGameButtons() {
+  gameBtns.forEach(btn => {
+    btn.disabled = false;
+    btn.classList.remove("opacity-50");
+  });
+}
+
+// ================= SOUND =================
+function playSound(name) {
+  let sound = new Audio(`sounds/${name}.mp3`);
+  sound.play();
+}
+
+// ================= START GAME =================
+startBtn.addEventListener("click", function () {
+  if (!started) {
     started = true;
 
-    levelUp();
+    gameSeq = [];
+    userSeq = [];
+    level = 0;
+
+    startBtn.disabled = true;
+    statusText.innerText = "Game Started 🎮";
+
+    setTimeout(levelUp, 500);
   }
 });
 
-function gameFlash(btn){
+// ================= FLASH =================
+function gameFlash(btn) {
+  playSound(btn.id);
   btn.classList.add("flash");
-  setTimeout(function (){
-    btn.classList.remove("flash");
-  }, 250);
+  setTimeout(() => btn.classList.remove("flash"), 300);
 }
 
-function userFlash(btn){
+function userFlash(btn) {
   btn.classList.add("userflash");
-  setTimeout(function (){
-    btn.classList.remove("userflash");
-  }, 250);
+  setTimeout(() => btn.classList.remove("userflash"), 200);
 }
 
-function levelUp(){
+// ================= LEVEL UP =================
+function levelUp() {
   userSeq = [];
   level++;
-  h2.innerText = `Level ${level}`;
 
-  let randIdx = Math.floor(Math.random() * 3);
-  let randColor = btns[randIdx];
-  let randBtn = document.querySelector(`.${randColor}`);
+  statusText.innerText = `Level ${level}`;
+  scoreBoard.innerText = `Score: ${level - 1} | High Score: ${highScore}`;
+
+  acceptingInput = false;
+  disableGameButtons();
+
+  let randColor = btns[Math.floor(Math.random() * btns.length)];
   gameSeq.push(randColor);
-  console.log(gameSeq);
-  
-  gameFlash(randBtn);
+
+  setTimeout(() => {
+    let randBtn = document.querySelector(`#${randColor}`);
+    gameFlash(randBtn);
+    acceptingInput = true;
+    enableGameButtons();
+  }, 700);
 }
 
-function checkAns(idx){
-  if(userSeq[idx] === gameSeq[idx]){
-  if(userSeq.length == gameSeq.length){
-    setTimeout(levelUp, 1000);
+// ================= CHECK ANSWER =================
+function checkAns(idx) {
+  if (userSeq[idx] === gameSeq[idx]) {
+    if (userSeq.length === gameSeq.length) {
+      // 👇 yahan buttons disable NAHI karenge
+      acceptingInput = false;
+
+      setTimeout(() => {
+        levelUp();
+      }, 600);
+    }
+  } else {
+    gameOver();
   }
-} else{
-   h2.innerHTML = `Game Over! Your score was <b> ${level}</b> <br> Press any key to start.`;
-   document.querySelector('body').style.backgroundColor = "red";
-   
-   setTimeout(function (){
-    document.querySelector('body').style.backgroundColor = "white";
-   }, 150);
-   reset();
-}
 }
 
-function btnPress(){
-  // console.log(this);
-  let btn = this;
-  userFlash(btn);
 
-  userColor = btn.getAttribute("id");
-  userSeq.push(userColor);
+// ================= GAME OVER =================
+function gameOver() {
+  playSound("wrong");
 
-  checkAns(userSeq.length - 1);
+  let finalScore = level - 1;
+  if (finalScore > highScore) {
+    highScore = finalScore;
+    localStorage.setItem("highScore", highScore);
+  }
+
+  statusText.innerHTML = `❌ Game Over! Score: ${finalScore}`;
+  scoreBoard.innerText = `Score: 0 | High Score: ${highScore}`;
+
+  document.body.classList.add("bg-danger", "text-white");
+  setTimeout(() => {
+    document.body.classList.remove("bg-danger", "text-white");
+  }, 400);
+
+  reset();
 }
 
-let allBtns = document.querySelectorAll(".btn");
-for(btn of allBtns){
-  btn.addEventListener("click", btnPress);
-}
+// ================= USER CLICK =================
+gameBtns.forEach(btn => {
+  btn.addEventListener("click", function () {
+    if (!acceptingInput) return;
 
-function reset(){
+    userFlash(this);
+    playSound(this.id);
+
+    userSeq.push(this.id);
+    checkAns(userSeq.length - 1);
+  });
+});
+
+// ================= RESET =================
+function reset() {
   started = false;
+  level = 0;
   gameSeq = [];
   userSeq = [];
-  level = 0;
+  acceptingInput = false;
+
+  enableGameButtons();
+  startBtn.disabled = false;
+  statusText.innerText = "Click Start Game to begin.";
 }
